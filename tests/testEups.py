@@ -414,6 +414,8 @@ class EupsTestCase(unittest.TestCase):
         self.assertEqual(len(prod), 1, "failed to find user-tagged product")
         self.assertEqual(prod[0].version, "2.5.2")
 
+        self.eups.unassignTag("mine", "python", "2.5.2")
+
     def testList(self):
 
         # basic find
