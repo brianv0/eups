@@ -1872,6 +1872,8 @@ class AdminListCacheCmd(EupsCmd):
         # always call the super-version so that the core options are set
         EupsCmd.addOptions(self)
 
+        self.addEupsOptions()           # e.g. --flavor
+        
     def execute(self):
         self.args.pop(0)                # remove the "admin"
 
@@ -1879,7 +1881,7 @@ class AdminListCacheCmd(EupsCmd):
             self.err("Unexpected arguments: %s" % " ".join(self.args))
             return 1
 
-        eups.listCache(verbose=self.opts.verbose)
+        eups.listCache(verbose=self.opts.verbose, flavor=self.opts.flavor)
 
         return 0
 
