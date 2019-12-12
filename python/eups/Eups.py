@@ -188,6 +188,7 @@ class Eups(object):
         self.aliases = {}               # aliases that we should set
         self.oldAliases = {}            # initial value of aliases.  This is a bit of a fake, as we
                                         # don't know how to set it but (un)?setAlias knows how to handle this
+        self.condaEnvs = []             # list of conda environments to in (name: str, stacked: bool) pairs
 
         self.who = utils.getUserName(full=True)
 

@@ -2074,6 +2074,15 @@ print(stdinfo, Disabling model fitting)
    \item \code{unsetupOptional(<Name> [options]}
      Same as \code{setupRequired} except that it does not fail if unable to unsetup.
 
+   \item \code{condaActivate(<EnvName>)}
+     Emits a \code{conda activate <EnvName>} for switching to a conda environment.
+     Conda must be activated first and the environment must be present.
+
+   \item \code{condaActivateStack(<EnvName1> [, <EnvName2>...])}
+     Emits a \code{conda activate --stack <EnvName1>, ...} for activating stacked
+     conda environments. Conda must be activated first and the environment must be
+     present.
+
 %------------------------------------------------------------------------------
 
 \end{itemize}

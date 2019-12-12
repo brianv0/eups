@@ -128,6 +128,14 @@ class TableTestCase2(unittest.TestCase):
         for action in actions:
             action.execute(self.eups, 1, True)
 
+    def testCondaActivate(self):
+        actions = self.table.actions("Linux64")
+        for action in actions:
+            action.execute(self.eups, 1, True)
+        self.assertEqual(self.eups.condaEnvs[0], ("FOO", False))
+        self.assertEqual(self.eups.condaEnvs[1], ("BAR", True))
+        self.assertEqual(self.eups.condaEnvs[2], ("BAZ", True))
+
 
 class EmptyTableTestCase(unittest.TestCase):
     """

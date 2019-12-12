@@ -768,6 +768,21 @@ def setup(productName, version=None, prefTags=None, productRoot=None,
                 cmd = "echo \"%s\"" % cmd
 
             cmds += [cmd]
+        
+        #
+        # Activate Conda Environment
+        #
+        if eupsenv.condaEnvs:
+            for condaEnv, stacked in eupsenv.condaEnvs:
+                if fwd:
+                    doStack = "--stack" if stacked else ""
+                    cmd = "conda activate %s %s" % (doStack, condaEnv)
+                    cmds += [cmd]
+                else:
+                    # Note: Does not verify the environments are the same
+                    cmd = 'conda deactivate'
+                    cmds += [cmd]
+
         #
         # Extra environment variables that EUPS uses
         #

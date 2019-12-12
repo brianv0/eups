@@ -7,6 +7,8 @@ envSet(GOOBPATH, "/opt/goob")  # this will get overridden
 setenv(GOOBPATH, "/usr/goob")
 envAppend(GOOBPATH, "/usr/local/goob")
 envPrepend(GOOBPATH, "/home/user/goob")
+condaActivate(FOO)
+condaActivateStack(BAR BAZ)
 
 if (type == build) {        # a build dependency
     envAppend(BAR, foobar)

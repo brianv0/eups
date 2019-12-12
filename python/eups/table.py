@@ -352,6 +352,8 @@ but no other interpretation is applied
                 try:
                     cmd = {
                         "addalias" : Action.addAlias,
+                        "condaactivate" : Action.condaActivate,
+                        "condaactivatestack" : Action.condaActivateStack,
                         "declareoptions" : Action.declareOptions,
                         "envappend" : Action.envAppend,
                         "envprepend" : Action.envPrepend,
@@ -373,6 +375,7 @@ but no other interpretation is applied
                         "unsetupoptional" : Action.unsetupOptional,
                         }[cmd]
                 except KeyError:
+                    print("xxx")
                     print("Unexpected line in %s:%d: %s" % (tableFile, lineNo, line), file=utils.stderr)
                     continue
             else:
@@ -439,6 +442,13 @@ but no other interpretation is applied
                 print("Ignoring unsupported directive %s at %s:%d" % (line, self.file, lineNo), file=utils.stderr)
                 continue
             elif cmd == Action.doPrint:
+                pass
+            elif cmd == Action.condaActivate:
+                if len(args) != 1:
+                    msg = "%s expected 1 argument, saw %s at %s:%d" % \
+                        (cmd, " ".join(args), self.file, lineNo)
+                    raise BadTableContent(self.file, msg=msg)
+            elif cmd == Action.condaActivateStack:
                 pass
             else:
                 print("Unrecognized line: %s at %s:%d" % (line, self.file, lineNo), file=utils.stderr)
@@ -712,6 +722,8 @@ class Action(object):
 
     # Possible actions; the comments apply to the field that _read adds to an Action: (cmd, args, extra)
     addAlias = "addAlias"
+    condaActivate = "condaActivate"
+    condaActivateStack = "condaActivateStack"
     declareOptions = "declareOptions"
     envAppend = "envAppend"             # not used
     envPrepend = "envPrepend"           # extra: "append"
@@ -785,6 +797,10 @@ class Action(object):
             pass
         elif self.cmd == Action.doPrint:
             self.execute_print(Eups, fwd)
+        elif self.cmd == Action.condaActivate:
+            self.execute_activateCondaEnv(Eups, False, fwd)
+        elif self.cmd == Action.condaActivateStack:
+            self.execute_activateCondaEnv(Eups, True, fwd)
         else:
             print("Unimplemented action", self.cmd, file=utils.stderr)
 
@@ -1219,6 +1235,11 @@ class Action(object):
             raise RuntimeError("Impossible destination: %s" % dest)
 
         print(" ".join(args), file=dest)
+
+    def execute_activateCondaEnv(self, Eups, stacked, fwd=True):
+        """Execute conda environment activation"""
+        for condaEnv in self.args:
+            Eups.condaEnvs.append((condaEnv, stacked))
 
     def execute_envUnset(self, Eups, fwd=True):
         """Execute envUnset"""
